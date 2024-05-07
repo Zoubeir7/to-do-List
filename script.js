@@ -1,54 +1,52 @@
-const inputtdl = document.querySelector('.textarea')
-const buttontdl = document.querySelector('.buttoninput')
-const listtdl = document.querySelector('.todolist')
+document.addEventListener('DOMContentLoaded', function () {
+    const formulaireTache = document.getElementById('formulaireTache');
+    const listeTaches = document.getElementById('listeTaches');
 
-function clickButton(e) {
-    e.preventDefault()
-    addTodo()
-}
+    formulaireTache.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-// adding todoList
-function addTodo() {
-    const itemall = document.createElement('div')
-    itemall.classList.add('itemall')
+        // Récupérer les valeurs des champs du formulaire
+        const titre = document.getElementById('titre').value;
+        const description = document.getElementById('description').value;
+        const dateLimite = document.getElementById('dateLimite').value;
+        const etat = document.getElementById('etat').value;
+        const priorite = document.getElementById('priorite').value;
 
-    const item = document.createElement('p')
-    item.classList.add('item')
-    item.innerText = inputtdl.value
-    itemall.appendChild(item)
+        // Créer un nouvel élément de tâche
+        const elementTache = document.createElement('li');
+        elementTache.innerHTML = `
+            <p><strong>Titre :</strong> ${titre}</p>
+            <p><strong>Description :</strong> ${description}</p>
+            <p><strong>Date :</strong> ${dateLimite}</p>
+            <p><strong>État :</strong> ${etat}</p>
+            <p><strong>Priorité :</strong> ${priorite}</p>
+            <button class="supprimer">Supprimer</button>
+            <button class="modifier">Modifier</button>
+        `;
 
-    if (inputtdl.value === '') return
+        // Ajouter la tâche à la liste des tâches
+        listeTaches.appendChild(elementTache);
 
-    const checkbutton = document.createElement("button")
-    checkbutton.innerHTML = '<i class="fa-solid fa-check"></i>'
-    checkbutton.classList.add("check-button")
-    itemall.appendChild(checkbutton)
+        // Effacer les champs du formulaire après soumission
+        formulaireTache.reset();
 
-    const trashbutton = document.createElement("button")
-    trashbutton.innerHTML = '<i class="fa-solid fa-trash"></i>'
-    trashbutton.classList.add("trash-button")
-    itemall.appendChild(trashbutton)
+        // Ajout des écouteurs d'événements pour les boutons de chaque tâche
+        const boutonSupprimer = elementTache.querySelector('.supprimer');
+        const boutonModifier = elementTache.querySelector('.modifier');
 
-    listtdl.appendChild(itemall)
-    inputtdl.value = ''
-}
+        // Suppression de la tâche
+        boutonSupprimer.addEventListener('click', function () {
+            elementTache.remove();
+        });
 
-// checking and delete todoList 
-function okdel(e) {
-    const item = e.target
+        // Modification de la tâche (à implémenter)
+        boutonModifier.addEventListener('click', function () {
 
-    // check
-    if (item.classList[0] === 'check-button') {
-        const todolist = item.parentElement
-        todolist.classList.toggle('checklist')
-    }
+        });
 
-    // delete
-    if (item.classList[0] === 'trash-button') {
-        const todolist = item.parentElement
-        todolist.remove()
-    }
-}
-
-buttontdl.addEventListener('click', clickButton)
-listtdl.addEventListener('click', okdel)
+        // Barrer une tâche si elle est terminée
+        if (etat === 'terminee') {
+            elementTache.style.textDecoration = 'line-through';
+        }
+    });
+});
